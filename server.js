@@ -1,4 +1,5 @@
-import app from './app.js';
+import app from "./app.js";
+import cloudinary from 'cloudinary';
 import dotenv from "dotenv";
 import connectDatabase from "./config/database.js";
 
@@ -20,7 +21,13 @@ if (process.env.NODE_ENV !== "PRODUCTION") {
 //connecting database
 connectDatabase();
 
+cloudinary.config({
+  
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 
+});
 
 
 app.listen(process.env.PORT,()=>{

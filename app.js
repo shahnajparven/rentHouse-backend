@@ -1,18 +1,29 @@
-import express from "express";
+import  express from "express";
+import cors from 'cors';
+import cookieParser from "cookie-parser";
+import bodyParser from "body-parser";
+import fileUpload from "express-fileupload";
 import dotenv from "dotenv";
+import AppRoutes from './routes/index.js';
+
+import errorMidleware from "./middleware/error.js";
+
 const app = express();
 
 const options = [
-  //  cors({ origin: ['http://localhost:5173'], credentials: true }),
-
-  express.json({ limit: "30mb" }),
+    cookieParser(),
+    //  cors({ origin: ['http://localhost:5173'], credentials: true }),
+     cors({ origin: true, credentials: true }),
+    express.json({ limit: '30mb' }),
+    bodyParser.urlencoded({ extended: true }),
+    fileUpload()
 ];
 
-app.use("*", options);
+app.use("*",options);
 
-//config
+//config 
 if (process.env.NODE_ENV !== "PRODUCTION") {
-  dotenv.config({ path: "config/config.env" });
+    dotenv.config({ path: "config/config.env" });
 }
 
 // app.use(express.json())
@@ -21,6 +32,15 @@ if (process.env.NODE_ENV !== "PRODUCTION") {
 // app.use(fileUpload());
 
 
+//API
+app.use('/api/v1/', AppRoutes);
+
+
+//middleware for error
+app.use(errorMidleware);
+
 
 
 export default app;
+
+
